@@ -1,0 +1,64 @@
+{
+	"logoSrc": "/img/content/logo.svg",
+	"categories": [
+		{
+			"id": "category-1",
+			"link": "/category/crm",
+			"title": "CRM"
+		},
+
+		{
+			"id": "category-2",
+			"link": "/category/prologue-uni",
+			"title": "Prologue UNI"
+		},
+
+		{
+			"id": "category-3",
+			"link": "/category/renovatio-clinica",
+			"title": "Renovatio Clinica"
+		},
+
+		{
+			"id": "category-4",
+			"link": "/category/samedia",
+			"title": "Samedia"
+		},
+
+		{
+			"id": "category-5",
+			"link": "/category/uni-personal",
+			"title": "UNI-Personal"
+		},
+
+		{
+			"id": "category-6",
+			"link": "/category/uni-server",
+			"title": "UNI-Server"
+		},
+
+		{
+			"id": "category-7",
+			"link": "/category/bonusy-i-skidki",
+			"title": "Бонусы и скидки"
+		},
+
+		{
+			"id": "category-8",
+			"link": "/category/vneshnie-servisy",
+			"title": "Внешние сервисы"
+		},
+
+		{
+			"id": "category-9",
+			"link": "/category/zakazy",
+			"title": "Заказы"
+		},
+
+		{
+			"id": "category-10",
+			"link": "/category/katalog-tovarov",
+			"title": "Каталог товаров"
+		}
+	]
+}
