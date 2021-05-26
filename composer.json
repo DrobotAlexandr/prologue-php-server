@@ -1,0 +1,17 @@
+{
+  "name": "PrologueFramework/prologue-php-server",
+  "authors": [
+    {
+      "name": "Alexandr Drobot",
+      "email": "alex@samedia.ru"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "autoload": {
+    "classmap": [
+      "src"
+    ]
+  }
+}
