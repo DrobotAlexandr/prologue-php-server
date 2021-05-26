@@ -2,6 +2,7 @@
 
 namespace #nameSpace#
 
-Class #className# {
+Class #className#
+{
 
 }

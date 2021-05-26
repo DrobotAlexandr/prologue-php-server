@@ -6,6 +6,9 @@ Class EndpointWorkSpace
 {
     public static function buildWorkSpace($params)
     {
+        if (!self::buildWorkSpace__isDevMode()) {
+            return false;
+        }
 
         if (!$params['endpointWorkSpace']) {
             return false;
@@ -15,6 +18,20 @@ Class EndpointWorkSpace
             self::handleWorkSpace($workSpace);
         }
 
+    }
+
+    private static function buildWorkSpace__isDevMode()
+    {
+
+        if (strstr($_SERVER['SERVER_NAME'], '.loc')) {
+            return true;
+        }
+
+        if ($_SERVER['SERVER_NAME'] === 'prologue-php-server') {
+            return true;
+        }
+
+        return false;
     }
 
     private static function handleWorkSpace($workSpace)
@@ -27,9 +44,55 @@ Class EndpointWorkSpace
 
         self::handleWorkSpace__createEndpointsClasses($endpoints);
 
-        echo '<pre>';
-        print_r($endpoints);
-        exit();
+        self::handleWorkSpace__createEndpointsMethods($endpoints);
+
+    }
+
+    private static function handleWorkSpace__createEndpointsMethods($endpoints)
+    {
+        if (!$endpoints) {
+            return false;
+        }
+
+
+        foreach ($endpoints as $endpoint) {
+
+            if (file_exists($endpoint['fileClassPath'])) {
+
+                $class = file_get_contents($endpoint['fileClassPath']) . '<<<<<<<<<<';
+
+                $methodSearch = 'public static function ' . $endpoint['methodName'];
+
+                if (strstr($class, $methodSearch)) {
+                    return false;
+                }
+
+                $code = '';
+
+                foreach (array_keys($endpoint['response']) as $key) {
+
+                    $code .= '$response["' . $key . '"] = ' . $endpoint['response'][$key] . ';' . PHP_EOL;
+
+                }
+
+
+                $code .= PHP_EOL . '        return $response;';
+
+
+                $method = '    public static function ' . $endpoint['methodName'] . '($request, $response)' . PHP_EOL . '    {' . PHP_EOL . '        ' . $code . ' ' . PHP_EOL . '    }';
+
+                $class = strtr($class,
+                    [
+                        '}<<<<<<<<<<' => $method . PHP_EOL . PHP_EOL . '}',
+                    ]
+                );
+
+                file_put_contents($endpoint['fileClassPath'], $class);
+
+            }
+
+        }
+
     }
 
     private static function handleWorkSpace__createEndpointsClasses($endpoints)
@@ -150,14 +213,36 @@ Class EndpointWorkSpace
 
         $data = self::objectToArray($data);
 
-        ob_start();
-        var_export($data);
-        $data = ob_get_contents() . '---';
-        ob_end_clean();
+        $arData = [];
 
-        $data = strtr($data, ['array (' => '[', ')---' => ']']);
+        foreach (array_keys($data) as $key) {
 
-        return $data;
+            ob_start();
+            var_export($data[$key]);
+            $data[$key] = ob_get_contents();
+            ob_end_clean();
+
+            if ($key == 'app') {
+                continue;
+            }
+
+            if ($key == 'metaData') {
+                continue;
+            }
+
+            if ($key == 'state') {
+                continue;
+            }
+
+            if ($key == 'access') {
+                continue;
+            }
+
+
+            $arData[$key] = $data[$key];
+        }
+
+        return $arData;
 
     }
 
