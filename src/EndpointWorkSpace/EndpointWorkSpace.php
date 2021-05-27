@@ -111,7 +111,7 @@ Class EndpointWorkSpace
                 $content = strtr($content,
                     [
                         '#nameSpace#' => strtr(rtrim($endpoint['classNameSpace'], '/'), ['/' => '\\']) . ';',
-                        '#className#' => $endpoint['className'],
+                        '#className#' => strtr($endpoint['className'], ['/' => '\\']),
                     ]
                 );
 
