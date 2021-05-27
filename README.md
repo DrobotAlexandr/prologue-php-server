@@ -11,7 +11,7 @@ composer require prologue-framework/prologue-php-server
 <li>Open root folder /</li>
 <li>Create /api/ folder </li>
 <li>
-<p>Create /api/.htaccess </p>
+Create /api/.htaccess <br>
 <pre><code>
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
