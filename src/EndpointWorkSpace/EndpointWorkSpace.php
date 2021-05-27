@@ -57,6 +57,7 @@ Class EndpointWorkSpace
 
         foreach ($endpoints as $endpoint) {
 
+
             if (file_exists($endpoint['fileClassPath'])) {
 
                 $class = file_get_contents($endpoint['fileClassPath']) . '<<<<<<<<<<';
@@ -64,7 +65,7 @@ Class EndpointWorkSpace
                 $methodSearch = 'public static function ' . $endpoint['methodName'];
 
                 if (strstr($class, $methodSearch)) {
-                    return false;
+                    continue;
                 }
 
                 $code = '';
@@ -75,9 +76,7 @@ Class EndpointWorkSpace
 
                 }
 
-
                 $code .= PHP_EOL . '        return $response;';
-
 
                 $method = '    public static function ' . $endpoint['methodName'] . '($request, $response)' . PHP_EOL . '    {' . PHP_EOL . '        ' . $code . ' ' . PHP_EOL . '    }';
 
@@ -92,6 +91,7 @@ Class EndpointWorkSpace
             }
 
         }
+
 
     }
 
@@ -110,8 +110,8 @@ Class EndpointWorkSpace
 
                 $content = strtr($content,
                     [
-                        '#nameSpace#' => strtr(rtrim($endpoint['classNameSpace'], '/'), ['/' => '\\']) . ';',
-                        '#className#' => (string)explode('/', $endpoint['className'])[substr_count($endpoint['className'], '/')],
+                        '#nameSpace#' => $endpoint['classNameSpace'],
+                        '#className#' => $endpoint['className'],
                     ]
                 );
 
@@ -170,7 +170,6 @@ Class EndpointWorkSpace
                     '/'
                 );
 
-
                 $classNameSpace = ltrim(
                     strtr($fileClassPath,
                         [
@@ -182,6 +181,17 @@ Class EndpointWorkSpace
                 );
 
                 $className = strtr($className, ['.php' => '']);
+
+                $endpointClassNameSpace = $classNameSpace;
+                $endpointClassName = $className;
+
+                $className = (string)explode('/', $endpointClassName)[substr_count($endpointClassName, '/')];
+
+                $nameSpace = strtr(rtrim($endpointClassNameSpace . $endpointClassName, '/'), ['/' => '\\']) . ';';
+
+                $nameSpace = strtr(trim($nameSpace), [$className . ';' => ';']);
+
+                $classNameSpace = strtr($nameSpace, ['\;' => ';']);
 
 
                 $arData[] = [
@@ -313,6 +323,108 @@ Class EndpointWorkSpace
         }
 
         return $results;
+    }
+
+    public static function getEndpoint()
+    {
+        $endpointUrl = $_SERVER['REQUEST_URI'];
+
+        $classPath = self::getEndpoint__getClassPath($endpointUrl);
+
+        $endpoint = [];
+
+        if (file_exists($classPath)) {
+
+            $endpoint = [
+                'classPath' => $classPath,
+                'className' => self::getEndpoint__getClassName($endpointUrl),
+                'method' => self::getEndpoint__getMethodName($endpointUrl),
+            ];
+
+        }
+
+        return $endpoint;
+
+    }
+
+    private static function getEndpoint__getClassPath($endpointUrl)
+    {
+        if (!$endpointUrl) {
+            return false;
+        }
+
+        $path = $_SERVER['DOCUMENT_ROOT'];
+
+        $arPart = explode('/', $endpointUrl);
+
+        $c = 0;
+        foreach ($arPart as $part) {
+            $c++;
+
+            if (count($arPart) != $c) {
+                $path .= '/' . $part;
+            } else {
+                $path .= '.php';
+                $path = strtr($path, ['//' => '/']);
+            }
+
+
+        }
+
+        return $path;
+
+    }
+
+    private static function getEndpoint__getClassName($endpointUrl)
+    {
+        if (!$endpointUrl) {
+            return false;
+        }
+
+        $name = '';
+
+        $arPart = explode('/', $endpointUrl);
+
+        $c = 0;
+        foreach ($arPart as $part) {
+            $c++;
+
+            if (count($arPart) != $c) {
+                $name .= '/' . $part;
+                $name = strtr($name, ['//' => '/']);
+            }
+
+
+        }
+
+        $name = strtr($name, ['/' => '\\']);
+
+        return $name;
+
+    }
+
+    private static function getEndpoint__getMethodName($endpointUrl)
+    {
+        if (!$endpointUrl) {
+            return false;
+        }
+
+        $name = '';
+
+        $arPart = explode('/', $endpointUrl);
+
+        $c = 0;
+        foreach ($arPart as $part) {
+            $c++;
+
+            if (count($arPart) == $c) {
+                $name = $part;
+            }
+
+
+        }
+
+        return $name;
     }
 
 }
