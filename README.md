@@ -1,8 +1,10 @@
 # prologue-php-server
 prologue-php-server
 <h2>Install</h2>
+
 <pre><code>
 composer require prologue-framework/prologue-php-server
+
 </code></pre>
 
 <h2>Create endpoint-server</h2>
@@ -11,7 +13,8 @@ composer require prologue-framework/prologue-php-server
 <li>Open root folder /</li>
 <li>Create /api/ folder </li>
 <li>
-Create /api/.htaccess <br>
+Create /api/.htaccess <br> <br>
+    
 <pre><code>
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -28,11 +31,13 @@ Options -Indexes
 <h3>include Autoload</h3>
 <pre><code>
 include '../vendor/autoload.php';
+
 </code></pre>
 
 <h3>Create Server object</h3>
 <pre><code>
 $server = new PrologueFramework\Http\Server\PhpServer();
+
 </code></pre>
 
 <h3>Set endpoints workspace</h3>
@@ -45,9 +50,11 @@ $server->setApiEndpointsWorkSpace(
         ]
     ]
 );
+
 </code></pre>
 
 <h3>Server, run!</h3>
 <pre><code>
 $server->run();
+
 </code></pre>
