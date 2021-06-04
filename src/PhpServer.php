@@ -4,6 +4,7 @@ namespace PrologueFramework\Http\Server;
 
 use  PrologueFramework\Http\Server\EndpointWorkSpace\EndpointWorkSpace;
 use  PrologueFramework\Http\Server\RunTime\RunTime;
+use  PrologueFramework\Http\Server\Response\Response;
 
 Class PhpServer
 {
@@ -50,16 +51,23 @@ Class PhpServer
     private function getEndpoint()
     {
         $this->endpoint = EndpointWorkSpace::getEndpoint();
-
     }
 
     private function includeEndpoint()
     {
+        if (!$this->endpoint) {
+            return false;
+        }
+
         include $this->endpoint['classPath'];
     }
 
     private function runMethod()
     {
+
+        if (!$this->endpoint) {
+            return false;
+        }
 
         $result = RunTime::runMethod(
             [
@@ -68,9 +76,12 @@ Class PhpServer
             ]
         );
 
-        echo '<pre>';
-        print_r($result);
-        exit();
+        Response::output(
+            [
+                'data' => $result
+            ]
+        );
+
     }
 
 }
