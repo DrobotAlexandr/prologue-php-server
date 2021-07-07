@@ -307,9 +307,13 @@ Class EndpointWorkSpace
 
     }
 
-    private
-    static function getDirContents($dir, &$results = [])
+    private static function getDirContents($dir, &$results = [])
     {
+
+        if (!file_exists($dir)) {
+            return false;
+        }
+
         $files = scandir($dir);
 
         foreach ($files as $key => $value) {
