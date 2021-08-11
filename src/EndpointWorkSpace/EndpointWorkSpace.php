@@ -232,10 +232,6 @@ Class EndpointWorkSpace
             $data[$key] = ob_get_contents();
             ob_end_clean();
 
-            if ($key == 'app') {
-                continue;
-            }
-
             if ($key == 'metaData') {
                 continue;
             }
