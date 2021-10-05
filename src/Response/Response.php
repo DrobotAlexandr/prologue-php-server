@@ -25,7 +25,7 @@ Class Response
         header('Content-type: application/json;');
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
         print $json;
-        exit();
+        return $json;
     }
 
 }
