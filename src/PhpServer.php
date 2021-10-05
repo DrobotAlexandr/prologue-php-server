@@ -43,8 +43,7 @@ Class PhpServer
         $this->includeEndpoint();
 
         $this->runMethod();
-
-        echo 'Server run!';
+        
     }
 
 
