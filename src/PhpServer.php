@@ -42,7 +42,7 @@ Class PhpServer
 
         $this->includeEndpoint();
 
-        $this->runMethod();
+        return $this->runMethod();
         
     }
 
@@ -75,7 +75,7 @@ Class PhpServer
             ]
         );
 
-        Response::output(
+        return Response::output(
             [
                 'data' => $result
             ]
