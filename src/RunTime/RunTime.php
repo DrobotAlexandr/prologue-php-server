@@ -44,7 +44,7 @@ Class RunTime
 
         if ($request->requestType == 'loadPage') {
 
-            $page = [];
+            $page = false;
 
             if (class_exists('\App\Models\Pages\Pages')) {
                 $page = \App\Models\Pages\Pages::getPageForRouter(
@@ -59,6 +59,14 @@ Class RunTime
                 'description' => $page['meta_description'],
                 'h1' => $page['meta_heading'],
             ];
+
+            if ($page['meta_heading'] != '404') {
+                $response['status'] = 200;
+            } else {
+                $response['status'] = 404;
+            }
+
+
         }
 
         return $response;
