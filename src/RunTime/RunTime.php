@@ -41,11 +41,23 @@ Class RunTime
 
     private static function runMethod__getRequest__setResponse($request, $response)
     {
+
         if ($request->requestType == 'loadPage') {
+
+            $page = [];
+
+            if (class_exists('\App\Models\Pages\Pages')) {
+                $page = \App\Models\Pages\Pages::getPageForRouter(
+                    [
+                        'url' => $request->client->device->http->url
+                    ]
+                );
+            }
+
             $response['metaData'] = [
-                'title' => '',
-                'description' => '',
-                'h1' => '',
+                'title' => $page['meta_title'],
+                'description' => $page['meta_description'],
+                'h1' => $page['meta_heading'],
             ];
         }
 
